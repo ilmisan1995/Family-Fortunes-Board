@@ -1,0 +1,559 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Fortunes Board</title>  <!-- Font mirip Familiada -->  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0074ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'VT323', monospace;
+    }
+
+    .board-wrapper {
+      position: relative;
+      width: 1100px;
+      max-width: 95vw;
+      background: #0074ff;
+      padding: 40px;
+    }
+
+    .top-box {
+      width: 140px;
+      height: 70px;
+      background: #000;
+      margin: 0 auto 20px;
+      border: 4px solid #111;
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .top-box span {
+      width: 28px;
+      height: 48px;
+      background: #111;
+      border: 2px solid #222;
+    }
+
+    .main-board {
+      position: relative;
+      background: #050505;
+      border: 6px solid #111;
+      padding: 30px 40px;
+      min-height: 600px;
+      overflow: hidden;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .answers {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .answer-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 120px;
+      align-items: center;
+      height: 52px;
+      color: #ffe600;
+      font-size: 2.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255,255,255,0.08);
+      padding: 0 10px;
+    }
+
+    .answer-number {
+      text-align: center;
+    }
+
+    .answer-text {
+      padding-left: 10px;
+    }
+
+    .answer-score {
+      text-align: center;
+    }
+
+    .total-row {
+      margin-top: 40px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 30px;
+      color: #ffe600;
+      font-size: 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .side-score {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 140px;
+      height: 80px;
+      background: #000;
+      border: 4px solid #111;
+      color: #ffe600;
+      font-size: 4rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 3;
+    }
+
+    .side-score.left {
+      left: -160px;
+    }
+
+    .side-score.right {
+      right: -160px;
+    }
+
+    @media (max-width: 900px) {
+      .answer-row {
+        grid-template-columns: 50px 1fr 80px;
+        font-size: 1.7rem;
+      }
+
+      .side-score {
+        width: 90px;
+        height: 60px;
+        font-size: 2.5rem;
+      }
+
+      .side-score.left {
+        left: -100px;
+      }
+
+      .side-score.right {
+        right: -100px;
+      }
+
+      .total-row {
+        font-size: 2rem;
+      }
+    }
+  </style></head>
+<body>
+  <div class="board-wrapper">
+    <div class="top-box">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div><div class="main-board">
+  <div class="grid-overlay"></div>
+
+  <div class="side-score left">00</div>
+  <div class="side-score right">56</div>
+
+  <div style="position: relative; z-index: 3; margin-bottom: 30px; color: #ffe600; font-size: 1.6rem; border: 2px solid rgba(255,255,255,0.15); padding: 15px; background: rgba(0,0,0,0.35);">
+    <div id="questionDisplay">PERTANYAAN: Sebutkan benda berbentuk bulat</div>
+  </div>
+
+  <div class="answers">
+    <div class="answer-row">
+      <div class="answer-number">1</div>
+      <div class="answer-text">_______________</div>
+      <div class="answer-score">--</div>
+    </div>
+
+    <div class="answer-row">
+      <div class="answer-number">2</div>
+      <div class="answer-text">_______________</div>
+      <div class="answer-score">--</div>
+    </div>
+
+    <div class="answer-row">
+      <div class="answer-number">3</div>
+      <div class="answer-text">_______________</div>
+      <div class="answer-score">--</div>
+    </div>
+
+    <div class="answer-row">
+      <div class="answer-number">4</div>
+      <div class="answer-text">_______________</div>
+      <div class="answer-score">--</div>
+    </div>
+
+    <div class="answer-row">
+      <div class="answer-number">5</div>
+      <div class="answer-text">_______________</div>
+      <div class="answer-score">--</div>
+    </div>
+
+    <div class="answer-row">
+      <div class="answer-number">6</div>
+      <div class="answer-text">_______________</div>
+      <div class="answer-score">--</div>
+    </div>
+
+    <div class="answer-row">
+      <div class="answer-number">7</div>
+      <div class="answer-text">_______________</div>
+      <div class="answer-score">--</div>
+    </div>
+
+    <div class="answer-row">
+      <div class="answer-number">8</div>
+      <div class="answer-text">_______________</div>
+      <div class="answer-score">--</div>
+    </div>
+  </div>
+
+  <div class="total-row">
+    <div style="display:flex; gap:30px; align-items:center;">
+      <span>TOTAL</span>
+      <span>82</span>
+    </div>
+    <div id="targetScoreDisplay">TARGET 300</div>
+  </div>
+
+  <div id="bigMoneyPanel" style="display:none; margin-top:30px; border:3px solid rgba(255,255,255,0.2); padding:20px; color:#ffe600; position:relative; z-index:3; background:rgba(0,0,0,0.35);">
+    <div style="font-size:2.5rem; margin-bottom:15px;">BIG MONEY</div>
+    <div id="bigMoneyTarget" style="font-size:1.8rem; margin-bottom:20px;">TARGET: 200</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
+      <div>
+        <div style="font-size:2rem; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+          <span>PEMAIN 1</span>
+          <span id="timerP1">15 DETIK</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 80px; gap:10px; font-size:1.5rem;">
+          <div>___________</div><div id="bm1p1">--</div>
+          <div>___________</div><div id="bm2p1">--</div>
+          <div>___________</div><div id="bm3p1">--</div>
+          <div>___________</div><div id="bm4p1">--</div>
+          <div>___________</div><div id="bm5p1">--</div>
+        </div>
+        <div style="margin-top:15px; display:flex; justify-content:space-between; font-size:1.8rem;">
+          <span>TOTAL</span>
+          <span id="bigMoneyTotalP1">0</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:2rem; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+          <span>PEMAIN 2</span>
+          <span id="timerP2">20 DETIK</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 80px; gap:10px; font-size:1.5rem;">
+          <div>___________</div><div id="bm1p2">--</div>
+          <div>___________</div><div id="bm2p2">--</div>
+          <div>___________</div><div id="bm3p2">--</div>
+          <div>___________</div><div id="bm4p2">--</div>
+          <div>___________</div><div id="bm5p2">--</div>
+        </div>
+        <div style="margin-top:15px; display:flex; justify-content:space-between; font-size:1.8rem;">
+          <span>TOTAL</span>
+          <span id="bigMoneyTotalP2">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; display:flex; justify-content:space-between; font-size:2rem; border-top:2px solid rgba(255,255,255,0.15); padding-top:15px;">
+      <span>GRAND TOTAL</span>
+      <span id="bigMoneyGrandTotal">0</span>
+    </div>
+  </div>
+    <div style="margin-top:20px; font-size:2rem; display:flex; justify-content:space-between;">
+      <span>BIG MONEY TOTAL</span>
+      <span id="bigMoneyTotal">0</span>
+    </div>
+  </div>
+</div>
+
+  </div>
+  <script>
+    const soundEffects = {
+      top: new Audio('sounds/Top.wav'),
+      correct: new Audio('sounds/Correct.wav'),
+      strike: new Audio('sounds/Strike.wav'),
+      repeat: new Audio('sounds/Repeat.wav')
+    };function playTopSound() {
+  soundEffects.top.currentTime = 0;
+  soundEffects.top.play();
+}
+
+function playCorrectSound() {
+  soundEffects.correct.currentTime = 0;
+  soundEffects.correct.play();
+}
+
+function playStrikeSound() {
+  soundEffects.strike.currentTime = 0;
+  soundEffects.strike.play();
+}
+
+function playRepeatSound() {
+  soundEffects.repeat.currentTime = 0;
+  soundEffects.repeat.play();
+}
+
+const rounds = [
+  { round: 1, label: 'Single Point', multiplier: 1 },
+  { round: 2, label: 'Single Point', multiplier: 1 },
+  { round: 3, label: 'Double Point', multiplier: 2 },
+  { round: 4, label: 'Double Point', multiplier: 2 },
+  { round: 5, label: 'Triple Point', multiplier: 3 },
+  { round: 6, label: 'Triple Point', multiplier: 3 }
+];
+
+const randomModes = [
+  { label: 'Single Point', multiplier: 1 },
+  { label: 'Double Point', multiplier: 2 },
+  { label: 'Triple Point', multiplier: 3 },
+  { label: 'Quadruple Point', multiplier: 4 },
+  { label: 'Quintuple Point', multiplier: 5 }
+];
+
+function getRoundMode(roundNumber) {
+  if (roundNumber <= 6) {
+    return rounds.find(r => r.round === roundNumber);
+  }
+
+  const randomIndex = Math.floor(Math.random() * randomModes.length);
+  return {
+    round: roundNumber,
+    ...randomModes[randomIndex]
+  };
+}
+
+let currentRound = 1;
+let currentMode = getRoundMode(currentRound);
+
+const roundDisplay = document.createElement('div');
+roundDisplay.style.position = 'absolute';
+roundDisplay.style.top = '20px';
+roundDisplay.style.right = '30px';
+roundDisplay.style.color = '#ffe600';
+roundDisplay.style.fontSize = '2rem';
+roundDisplay.style.zIndex = '5';
+roundDisplay.innerHTML = `ROUND ${currentRound} - ${currentMode.label}`;
+
+document.querySelector('.main-board').appendChild(roundDisplay);
+
+function nextRound() {
+  currentRound++;
+  currentMode = getRoundMode(currentRound);
+  roundDisplay.innerHTML = `ROUND ${currentRound} - ${currentMode.label}`;
+}
+
+// Jalankan di console browser untuk pindah ronde:
+// nextRound();
+
+const boardData = {
+  targetScore: 300,
+  bigMoney: {
+    enabled: false,
+    target: 200,
+    player1: [0, 0, 0, 0, 0],
+    player2: [0, 0, 0, 0, 0],
+    timerPlayer1: 15,
+    timerPlayer2: 20
+  },
+  question: 'Sebutkan benda berbentuk bulat',
+  answers: [
+    { text: 'Golf', score: 38 },
+    { text: 'Ping Pong', score: 11 },
+    { text: 'Snowman', score: 8 },
+    { text: 'Baseball', score: 7 },
+    { text: 'X-Mas Ornament', score: 6 },
+    { text: 'White Dudes', score: 5 },
+    { text: 'Billiard Ball', score: 4 },
+    { text: 'Basketball', score: 3 }
+  ]
+};
+
+function updateBoard(data) {
+  document.getElementById('questionDisplay').innerText = `PERTANYAAN: ${data.question}`;
+
+  const rows = document.querySelectorAll('.answer-row');
+  rows.forEach((row, index) => {
+    if (data.answers[index]) {
+      row.querySelector('.answer-text').innerText = data.answers[index].text;
+      row.querySelector('.answer-score').innerText = data.answers[index].score;
+    }
+  });
+
+  const total = data.answers.reduce((sum, item) => sum + Number(item.score), 0);
+  document.querySelector('.total-row span:last-child').innerText = total;
+  document.querySelector('.side-score.right').innerText = total;
+  document.getElementById('targetScoreDisplay').innerText = `TARGET ${data.targetScore || 300}`;
+
+  if (data.bigMoney && data.bigMoney.enabled) {
+    document.getElementById('bigMoneyPanel').style.display = 'block';
+    document.getElementById('bigMoneyTarget').innerText = `TARGET: ${data.bigMoney.target}`;
+    document.getElementById('timerP1').innerText = `${data.bigMoney.timerPlayer1 || 15} DETIK`;
+    document.getElementById('timerP2').innerText = `${data.bigMoney.timerPlayer2 || 20} DETIK`;
+
+    data.bigMoney.player1.forEach((score, index) => {
+      const item = document.getElementById(`bm${index + 1}p1`);
+      if (item) item.innerText = score;
+    });
+
+    data.bigMoney.player2.forEach((score, index) => {
+      const item = document.getElementById(`bm${index + 1}p2`);
+      if (item) item.innerText = score;
+    });
+
+    const totalP1 = data.bigMoney.player1.reduce((sum, score) => sum + Number(score), 0);
+    const totalP2 = data.bigMoney.player2.reduce((sum, score) => sum + Number(score), 0);
+    const grandTotal = totalP1 + totalP2;
+
+    document.getElementById('bigMoneyTotalP1').innerText = totalP1;
+    document.getElementById('bigMoneyTotalP2').innerText = totalP2;
+    document.getElementById('bigMoneyGrandTotal').innerText = grandTotal;
+  } else {
+    document.getElementById('bigMoneyPanel').style.display = 'none';
+  }
+}
+
+const exampleQuestionFile = {
+  targetScore: 300,
+  question: 'Sebutkan benda berbentuk bulat',
+  answers: [
+    { text: 'Golf', score: 38 },
+    { text: 'Ping Pong', score: 11 },
+    { text: 'Snowman', score: 8 },
+    { text: 'Baseball', score: 7 },
+    { text: 'X-Mas Ornament', score: 6 },
+    { text: 'White Dudes', score: 5 },
+    { text: 'Billiard Ball', score: 4 },
+    { text: 'Basketball', score: 3 }
+  ],
+  bigMoney: {
+    enabled: false,
+    target: 200,
+    player1: [0, 0, 0, 0, 0],
+    player2: [0, 0, 0, 0, 0]
+  }
+};
+
+function exportQuestionFile() {
+  const mainUnitData = {
+    targetScore: boardData.targetScore || 300,
+    question: boardData.question,
+    answers: boardData.answers
+  };
+
+  const dataStr = JSON.stringify(mainUnitData, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'family-fortunes-main-unit.json';
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function importQuestionFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const importedData = JSON.parse(e.target.result);
+
+    updateBoard({
+      ...boardData,
+      ...importedData,
+      bigMoney: boardData.bigMoney
+    });
+  };
+  reader.readAsText(file);
+}
+
+// Format JSON Main Unit:
+// {
+//   "targetScore": 300,
+//   "question": "Sebutkan benda berbentuk bulat",
+//   "answers": [
+//     { "text": "Golf", "score": 38 },
+//     { "text": "Ping Pong", "score": 11 },
+//     { "text": "Snowman", "score": 8 },
+//     { "text": "Baseball", "score": 7 },
+//     { "text": "X-Mas Ornament", "score": 6 },
+//     { "text": "White Dudes", "score": 5 },
+//     { "text": "Billiard Ball", "score": 4 },
+//     { "text": "Basketball", "score": 3 }
+//   ]
+// }
+
+// Jalankan di console browser:
+// exportQuestionFile();
+// document.getElementById('importQuestionFile').click();
+
+// Tambahkan input file manual di HTML:
+// <input type="file" id="importQuestionFile" accept=".json" onchange="importQuestionFile(event)">
+
+// Contoh Big Money:
+// updateBoard({
+//   targetScore: 300,
+//   question: 'Sebutkan benda berbentuk bulat',
+//   answers: [
+//     { text: 'Golf', score: 38 },
+//     { text: 'Ping Pong', score: 11 },
+//     { text: 'Snowman', score: 8 },
+//     { text: 'Baseball', score: 7 },
+//     { text: 'X-Mas Ornament', score: 6 },
+//     { text: 'White Dudes', score: 5 },
+//     { text: 'Billiard Ball', score: 4 },
+//     { text: 'Basketball', score: 3 }
+//   ],
+//   bigMoney: {
+//     enabled: true,
+//     target: 200,
+//     timerPlayer1: 15,
+//     timerPlayer2: 20,
+//     player1: [45, 38, 27, 52, 30],
+//     player2: [35, 25, 20, 15, 10]
+//   }
+// });
+
+// Contoh edit pertanyaan, jawaban, dan skor:
+// updateBoard({
+//   question: 'Sebutkan makanan pedas',
+//   answers: [
+//     { text: 'Sambal', score: 35 },
+//     { text: 'Seblak', score: 20 },
+//     { text: 'Bakso', score: 12 },
+//     { text: 'Mie Ayam', score: 10 },
+//     { text: 'Rendang', score: 8 },
+//     { text: 'Nasi Goreng', score: 6 },
+//     { text: 'Ayam Geprek', score: 5 },
+//     { text: 'Keripik', score: 4 }
+//   ]
+// });
+
+updateBoard(boardData);
+
+  </script>
+</body>
+</html>
